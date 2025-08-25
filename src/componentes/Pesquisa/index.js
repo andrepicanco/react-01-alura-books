@@ -3,6 +3,7 @@ import Input from '../Input'
 import { useEffect, useState } from 'react'
 import { livros } from './dadosPesquisa'
 import { getLivros } from '../../servicos/livros'
+import { deleteFavorito, postFavorito } from '../../servicos/favoritos'
 
 const PesquisaContainer = styled.section`
     background-image: linear-gradient(90deg, #002F252 35%, #326589 165%);
@@ -56,6 +57,17 @@ function Pesquisa() {
         setLivros(livrosDaAPI)
     }
 
+    async function deletarFavorito(id) {
+        await deleteFavorito(id)
+        
+        alert(`Livro de ${id} deletado!`)
+    }
+
+    async function insertFavorito(id) {
+        await postFavorito(id)
+        alert(`Livro de ${id} inserido!`)
+    }
+
     return (
         <PesquisaContainer>
             <Titulo>Já sabe por onde começar?</Titulo>
@@ -69,7 +81,7 @@ function Pesquisa() {
                 }}
             />
             { livrosPesquisados.map(livro => (
-                <Resultado>
+                <Resultado onClick={() => insertFavorito(livro.id)}>
                     <p>{livro.nome}</p>
                     <img src={livro.src}/>
                 </Resultado>
